@@ -43,7 +43,7 @@ export default function MapPage() {
 
     if (loading) {
         return (
-            <div className="flex min-h-screen items-center justify-center">
+            <div className="flex min-h-dvh items-center justify-center">
                 <Loader2 className="w-12 h-12 animate-spin text-zinc-500" />
             </div>
         );
@@ -52,19 +52,19 @@ export default function MapPage() {
     const currentLevel = player?.current_level ?? 1;
 
     return (
-        <main className="flex min-h-screen flex-col items-center p-6">
+        <main className="flex min-h-dvh flex-col items-center px-4 py-4 md:p-6">
             <motion.h1
                 initial={{ y: -30, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
-                className="text-4xl md:text-5xl font-bold text-zinc-800 mb-2 mt-8 rotate-[-1deg]"
+                className="text-3xl md:text-5xl font-bold text-zinc-800 mb-1 md:mb-2 mt-4 md:mt-8 rotate-[-1deg]"
             >
                 Mapa do Tesouro
             </motion.h1>
-            <p className="text-xl text-zinc-500 mb-10">
+            <p className="text-lg md:text-xl text-zinc-500 mb-4 md:mb-10">
                 Escolha sua aventura, {player?.nickname}!
             </p>
 
-            <div className="flex flex-col gap-6 w-full max-w-md">
+            <div className="flex flex-col gap-3 md:gap-6 w-full max-w-md">
                 {LEVELS.map((level, i) => {
                     const isUnlocked = level.id <= currentLevel;
                     const isCurrent = level.id === currentLevel;
@@ -78,12 +78,12 @@ export default function MapPage() {
                         >
                             <ScribbleButton
                                 variant={isUnlocked ? level.color : "primary"}
-                                className={`w-full text-left h-auto py-5 px-6 text-xl flex items-center gap-4 ${!isUnlocked ? "opacity-40 grayscale" : ""}`}
+                                className={`w-full text-left h-auto py-3 px-4 md:py-5 md:px-6 text-base md:text-xl flex items-center gap-3 md:gap-4 ${!isUnlocked ? "opacity-40 grayscale" : ""}`}
                                 disabled={!isUnlocked}
                                 animated={isCurrent}
                                 onClick={() => router.push(`/play?level=${level.id}`)}
                             >
-                                <span className="text-4xl">{isUnlocked ? level.emoji : "🔒"}</span>
+                                <span className="text-2xl md:text-4xl">{isUnlocked ? level.emoji : "🔒"}</span>
                                 <div className="flex flex-col">
                                     <span className="font-bold">Fase {level.id}</span>
                                     <span className="text-base opacity-80">{level.name}</span>
@@ -99,7 +99,7 @@ export default function MapPage() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.5 }}
-                className="mt-10 flex gap-6 text-xl font-bold text-zinc-600"
+                className="mt-6 md:mt-10 flex gap-6 text-lg md:text-xl font-bold text-zinc-600"
             >
                 <span>❤️ {player?.lives ?? 10}</span>
                 <span>🪙 {player?.coins ?? 100}</span>

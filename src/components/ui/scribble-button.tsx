@@ -26,9 +26,9 @@ export function ScribbleButton({
     };
 
     const buttonClasses = cn(
-        "relative inline-flex items-center justify-center px-8 py-4 font-sans text-2xl font-bold transition-all border-[3px] border-black disabled:opacity-50 disabled:pointer-events-none",
+        "relative inline-flex items-center justify-center px-4 py-2 md:px-8 md:py-4 font-sans text-lg md:text-2xl font-bold transition-all border-[3px] border-black disabled:opacity-50 disabled:pointer-events-none",
         "rounded-[255px_15px_225px_15px/15px_225px_15px_255px]",
-        "shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:shadow-[0px_0px_0px_0px_rgba(0,0,0,1)] active:translate-x-[4px] active:translate-y-[4px]",
+        "shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] active:shadow-[0px_0px_0px_0px_rgba(0,0,0,1)] active:translate-x-[3px] active:translate-y-[3px] md:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] md:active:translate-x-[4px] md:active:translate-y-[4px]",
         colors[variant],
         className
     );

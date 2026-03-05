@@ -73,14 +73,14 @@ export default function Home() {
 
   if (checkingPlayer) {
     return (
-      <main className="flex min-h-screen flex-col items-center justify-center p-6">
+      <main className="flex min-h-dvh flex-col items-center justify-center p-6">
         <div className="w-12 h-12 border-4 border-zinc-300 border-t-zinc-800 rounded-full animate-spin" />
       </main>
     );
   }
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-6 relative overflow-hidden">
+    <main className="flex min-h-dvh flex-col items-center justify-center p-6 relative overflow-hidden">
       {/* Decorative Scribbles */}
       <div className="absolute top-10 left-10 text-6xl opacity-20 pointer-events-none rotate-[-12deg]">⭐</div>
       <div className="absolute bottom-20 right-10 text-6xl opacity-20 pointer-events-none rotate-[15deg]">🚀</div>

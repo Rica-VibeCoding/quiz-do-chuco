@@ -59,24 +59,24 @@ export function LevelCompleteModal({ level }: LevelCompleteModalProps) {
                 initial={{ scale: 0, rotate: -10 }}
                 animate={{ scale: 1, rotate: 0 }}
                 transition={{ type: "spring", stiffness: 150, damping: 12 }}
-                className="relative w-full max-w-md p-10 bg-yellow-50 border-[4px] border-black text-center shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] rounded-[5px_225px_15px_255px/255px_15px_225px_15px]"
+                className="relative w-full max-w-md p-6 md:p-10 bg-yellow-50 border-[3px] md:border-[4px] border-black text-center shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] md:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] rounded-[5px_225px_15px_255px/255px_15px_225px_15px]"
             >
-                <div className="text-8xl mb-4">🏆</div>
+                <div className="text-6xl md:text-8xl mb-3 md:mb-4">🏆</div>
 
-                <h2 className="text-4xl font-bold text-yellow-800 mb-2">
+                <h2 className="text-3xl md:text-4xl font-bold text-yellow-800 mb-1 md:mb-2">
                     Muito bom!!
                 </h2>
-                <p className="text-2xl text-zinc-700 mb-2">
+                <p className="text-xl md:text-2xl text-zinc-700 mb-1 md:mb-2">
                     Voce completou o desafio!
                 </p>
-                <p className="text-lg text-zinc-500 mb-8">
+                <p className="text-base md:text-lg text-zinc-500 mb-5 md:mb-8">
                     {LEVEL_NAMES[level] || `Fase ${level}`}
                 </p>
 
                 <ScribbleButton
                     variant="success"
                     onClick={() => router.push("/map")}
-                    className="text-2xl w-full"
+                    className="text-xl md:text-2xl w-full"
                     animated
                 >
                     Voltar ao Mapa!
