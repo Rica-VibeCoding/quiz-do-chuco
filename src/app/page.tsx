@@ -26,7 +26,8 @@ export default function Home() {
       const savedNickname = localStorage.getItem(STORAGE_KEYS.playerNickname);
 
       if (id) {
-        const res = await getPlayerAction(id);
+        const playerId = id;
+        const res = await getPlayerAction(playerId);
         if ("data" in res && res.data) {
           setExistingPlayer(res.data);
           if (savedNickname) setNickname(savedNickname);

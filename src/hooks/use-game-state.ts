@@ -118,12 +118,13 @@ export function useGameState(level: number) {
         setState({ ...INITIAL_STATE, loading: false });
         return;
       }
+      const playerIdFromStorage = id;
 
-      playerId.current = id;
+      playerId.current = playerIdFromStorage;
       setState({ ...INITIAL_STATE, loading: true });
 
       const [playerRes, questionsRes] = await Promise.all([
-        getPlayerAction(id),
+        getPlayerAction(playerIdFromStorage),
         getQuestionsForLevelAction(level),
       ]);
 

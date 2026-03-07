@@ -20,9 +20,10 @@ export default function MapPage() {
       router.replace("/");
       return;
     }
+    const playerId = id;
 
     async function loadPlayer() {
-      const res = await getPlayerAction(id);
+      const res = await getPlayerAction(playerId);
       if ("data" in res && res.data) {
         setPlayer(res.data);
       } else {
