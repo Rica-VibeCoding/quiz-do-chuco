@@ -49,6 +49,7 @@
 
 :root {
   --radius: 0.625rem;
+  --font-scribble: "Comic Sans MS", "Chalkboard SE", "Marker Felt", "Trebuchet MS", cursive;
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
@@ -136,5 +137,5 @@
 }
 
 @theme inline {
-  --font-sans: var(--font-comic-neue);
+  --font-sans: var(--font-scribble);
 }

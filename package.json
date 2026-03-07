@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "trivia:sync": "node --env-file=.env.local src/scripts/sync-trivia.mjs",
+    "trivia:dry-run": "node --env-file=.env.local src/scripts/sync-trivia.mjs --dry-run"
   },
   "dependencies": {
     "@supabase/ssr": "^0.9.0",

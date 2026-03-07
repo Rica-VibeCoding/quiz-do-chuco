@@ -1,12 +1,17 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { motion } from "framer-motion";
+import { PlayerDTO } from "@/application/player/dtos/player.dto";
 import { Input } from "@/components/ui/input";
 import { ScribbleButton } from "@/components/ui/scribble-button";
-import { motion } from "framer-motion";
-import { startOrResumeGameAction, getPlayerAction } from "@/presentation/actions/game.actions";
-import { PlayerDTO } from "@/application/player/dtos/player.dto";
+import { DEFAULT_PROGRESS, STORAGE_KEYS } from "@/lib/game-config";
+import {
+  getPlayerAction,
+  saveProgressAction,
+  startOrResumeGameAction,
+} from "@/presentation/actions/game.actions";
 
 export default function Home() {
   const router = useRouter();
@@ -15,11 +20,11 @@ export default function Home() {
   const [existingPlayer, setExistingPlayer] = useState<PlayerDTO | null>(null);
   const [checkingPlayer, setCheckingPlayer] = useState(true);
 
-  // Check if there's an existing player in localStorage
   useEffect(() => {
     async function checkExisting() {
-      const id = localStorage.getItem("quiz_player_id");
-      const savedNickname = localStorage.getItem("quiz_player_nickname");
+      const id = localStorage.getItem(STORAGE_KEYS.playerId);
+      const savedNickname = localStorage.getItem(STORAGE_KEYS.playerNickname);
+
       if (id) {
         const res = await getPlayerAction(id);
         if ("data" in res && res.data) {
@@ -27,8 +32,10 @@ export default function Home() {
           if (savedNickname) setNickname(savedNickname);
         }
       }
+
       setCheckingPlayer(false);
     }
+
     checkExisting();
   }, []);
 
@@ -41,14 +48,14 @@ export default function Home() {
     try {
       const response = await startOrResumeGameAction(nickname);
 
-      if ('error' in response) {
+      if ("error" in response) {
         alert(response.error);
         return;
       }
 
-      if ('data' in response && response.data) {
-        localStorage.setItem("quiz_player_id", response.data.id as string);
-        localStorage.setItem("quiz_player_nickname", response.data.nickname);
+      if ("data" in response && response.data) {
+        localStorage.setItem(STORAGE_KEYS.playerId, response.data.id as string);
+        localStorage.setItem(STORAGE_KEYS.playerNickname, response.data.nickname);
         router.push("/map");
       }
     } catch (error) {
@@ -64,46 +71,66 @@ export default function Home() {
   };
 
   const handleRestart = async () => {
-    // Clear existing player from localStorage to start fresh
-    localStorage.removeItem("quiz_player_id");
-    localStorage.removeItem("quiz_player_nickname");
-    setExistingPlayer(null);
-    setNickname("");
+    if (!existingPlayer?.id || loading) return;
+
+    setLoading(true);
+
+    try {
+      const response = await saveProgressAction(existingPlayer.id, DEFAULT_PROGRESS);
+      if ("error" in response) {
+        alert(response.error);
+        return;
+      }
+
+      localStorage.setItem(STORAGE_KEYS.playerId, existingPlayer.id);
+      localStorage.setItem(STORAGE_KEYS.playerNickname, existingPlayer.nickname);
+      setExistingPlayer(null);
+      setNickname("");
+      router.push("/map");
+    } catch (error) {
+      console.error(error);
+      alert("Não foi possível reiniciar a aventura.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (checkingPlayer) {
     return (
       <main className="flex min-h-dvh flex-col items-center justify-center p-6">
-        <div className="w-12 h-12 border-4 border-zinc-300 border-t-zinc-800 rounded-full animate-spin" />
+        <div className="h-12 w-12 animate-spin rounded-full border-4 border-zinc-300 border-t-zinc-800" />
       </main>
     );
   }
 
   return (
-    <main className="flex min-h-dvh flex-col items-center justify-center p-6 relative overflow-hidden">
-      {/* Decorative Scribbles */}
-      <div className="absolute top-10 left-10 text-6xl opacity-20 pointer-events-none rotate-[-12deg]">⭐</div>
-      <div className="absolute bottom-20 right-10 text-6xl opacity-20 pointer-events-none rotate-[15deg]">🚀</div>
-      <div className="absolute top-40 right-20 text-5xl opacity-20 pointer-events-none rotate-[45deg]">🖍️</div>
+    <main className="relative flex min-h-dvh flex-col items-center justify-center overflow-hidden p-6">
+      <div className="pointer-events-none absolute left-10 top-10 rotate-[-12deg] text-6xl opacity-20">
+        ⭐
+      </div>
+      <div className="pointer-events-none absolute bottom-20 right-10 rotate-[15deg] text-6xl opacity-20">
+        🚀
+      </div>
+      <div className="pointer-events-none absolute right-20 top-40 rotate-[45deg] text-5xl opacity-20">
+        🖍️
+      </div>
 
       <motion.div
         initial={{ y: -50, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ type: "spring", stiffness: 100 }}
-        className="text-center z-10 w-full max-w-sm"
+        className="z-10 w-full max-w-sm text-center"
       >
-        <h1 className="text-5xl md:text-7xl font-bold text-[#ef4444] mb-2 drop-shadow-[3px_3px_0px_rgba(0,0,0,1)] rotate-[-2deg]">
+        <h1 className="mb-2 rotate-[-2deg] text-5xl font-bold text-[#ef4444] drop-shadow-[3px_3px_0px_rgba(0,0,0,1)] md:text-7xl">
           O Quiz
         </h1>
-        <h2 className="text-4xl md:text-6xl font-bold text-[#3b82f6] mb-12 drop-shadow-[3px_3px_0px_rgba(0,0,0,1)] rotate-[1deg]">
+        <h2 className="mb-12 rotate-[1deg] text-4xl font-bold text-[#3b82f6] drop-shadow-[3px_3px_0px_rgba(0,0,0,1)] md:text-6xl">
           do Chuco!
         </h2>
 
         {existingPlayer ? (
           <div className="flex flex-col gap-4">
-            <p className="text-xl font-bold text-zinc-700">
-              Ola de volta, {existingPlayer.nickname}!
-            </p>
+            <p className="text-xl font-bold text-zinc-700">Olá de volta, {existingPlayer.nickname}!</p>
             <p className="text-zinc-500">
               Fase {existingPlayer.current_level} - Pergunta {existingPlayer.current_question}
             </p>
@@ -112,24 +139,24 @@ export default function Home() {
               variant="success"
               animated
               onClick={handleContinue}
-              className="w-full mt-2 text-3xl h-20"
+              className="mt-2 h-20 w-full text-3xl"
             >
-              Continuar Aventura!
+              Continuar aventura!
             </ScribbleButton>
 
             <ScribbleButton
               variant="danger"
               onClick={handleRestart}
-              className="w-full text-lg h-14"
+              className="h-14 w-full text-lg"
             >
-              Recomecar do Zero
+              Recomeçar do zero
             </ScribbleButton>
           </div>
         ) : (
           <form onSubmit={handlePlay} className="flex flex-col gap-6">
             <div className="flex flex-col gap-2">
-              <label htmlFor="nickname" className="text-xl font-bold text-zinc-800 text-left ml-2">
-                Qual o seu apelido de heroi?
+              <label htmlFor="nickname" className="ml-2 text-left text-xl font-bold text-zinc-800">
+                Qual o seu apelido de herói?
               </label>
               <Input
                 id="nickname"
@@ -147,7 +174,7 @@ export default function Home() {
               variant="success"
               animated
               disabled={!nickname.trim() || loading}
-              className="w-full mt-4 text-3xl h-20"
+              className="mt-4 h-20 w-full text-3xl"
             >
               {loading ? "CARREGANDO..." : "JOGAR!"}
             </ScribbleButton>

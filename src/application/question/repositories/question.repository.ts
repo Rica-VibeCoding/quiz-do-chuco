@@ -8,7 +8,10 @@ export class QuestionRepository {
             .from("qz_questions")
             .select("*")
             .eq("level", level)
-            .order("id", { ascending: true }); // Or order randomly based on game requirements
+            .eq("status", "approved")
+            .order("is_boss", { ascending: true })
+            .order("difficulty_weight", { ascending: true, nullsFirst: false })
+            .order("id", { ascending: true });
 
         if (error) {
             console.error("Error fetching questions:", error);
