@@ -1,36 +1,82 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Quiz do Chuco
 
-## Getting Started
+Aplicação web educativa em Next.js para o "Chuco", com progresso salvo no Supabase, fases sequenciais, power-ups, boss no fim de cada fase e ingestão de perguntas externas com curadoria.
 
-First, run the development server:
+## Estado Atual
+- Produção publicada a partir de `main`
+- Banco principal do projeto: Supabase `pessoal`
+- Tabelas ativas do quiz: `public.qz_players` e `public.qz_questions`
+- Fluxo principal validado: home, mapa, gameplay, feedback, `Game Over`, `Level Complete` e `Fim do Jogo`
+- Conteúdo carregado no banco principal:
+  - fase 1: 20 perguntas aprovadas
+  - fase 2: 20 perguntas aprovadas
+  - fase 3: 20 perguntas aprovadas
+  - fase 4: 25 perguntas aprovadas
+  - fase 5: 26 perguntas aprovadas
+
+## Stack
+- Next.js 16
+- React 19
+- TypeScript
+- Tailwind CSS
+- Framer Motion
+- Supabase
+- Vercel
+
+## Ambiente
+Variáveis mínimas para o app:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Variáveis para scripts de ingestão:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+SUPABASE_SERVICE_ROLE_KEY=
+TRIVIA_API_BASE_URL=
+TRIVIA_API_KEY=
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Desenvolvimento
 
-## Learn More
+```bash
+npm install
+npm run dev
+```
 
-To learn more about Next.js, take a look at the following resources:
+Abrir `http://localhost:3000`.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Scripts
+Lint:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+npm run lint
+```
 
-## Deploy on Vercel
+Ingestão da Trivia API sem gravar:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```bash
+npm run trivia:dry-run
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Ingestão real:
+
+```bash
+npm run trivia:sync
+```
+
+Ingestão real aprovando também perguntas externas:
+
+```bash
+npm run trivia:sync -- --approve-api
+```
+
+## Documentação
+- Contexto operacional atual: [`docs/context/current-state.md`](./docs/context/current-state.md)
+- Banco e schema: [`docs/inf systen/DATABASE.md`](./docs/inf%20systen/DATABASE.md)
+- Produto: [`docs/inf systen/PRD.md`](./docs/inf%20systen/PRD.md)
+- Telas e fluxos: [`docs/inf systen/SCREENS.md`](./docs/inf%20systen/SCREENS.md)
+- Roadmap atual: [`docs/plan/06-roadmap-dificuldade-e-ux.md`](./docs/plan/06-roadmap-dificuldade-e-ux.md)
+- Integração de perguntas: [`docs/plan/07-the-trivia-api.md`](./docs/plan/07-the-trivia-api.md)
